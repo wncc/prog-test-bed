@@ -12,6 +12,14 @@ body {
   /* Negative indent footer by it's height */
   margin: 0 auto -60px;
 }
+.span2{
+  padding : 20px 0;
+  text-align : center;
+}
+.span10{
+  padding : 4px 0;
+  text-align : center;
+}
 
 /* Set the fixed height of the footer here */
 #push,

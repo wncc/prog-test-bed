@@ -3,6 +3,7 @@
  * Footer for all pages
  */
 ?>
+    </div> <!-- /wrap -->
     <div id="footer">
       <div class="container">
         <p class="muted credit">Built with love by <a href="about.php">WnCC.</p>
