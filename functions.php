@@ -9,7 +9,7 @@ function connectdb() {
   include('dbinfo.php');
   $con=mysql_connect($host,$user,$password);
   if (!$con) {
-		die('Could not connect: ' . mysql_error());
+		die('Could not connect to mysql: ' . mysql_error());
 	}
   mysql_select_db($database) or die('Error connecting to database. '. mysql_error());
 }
@@ -21,5 +21,10 @@ function randomNum($length){
   $base10Rand = mt_rand($rangeMin, $rangeMax);
   $newRand = base_convert($base10Rand, 10, 36);
   return $newRand;
+}
+
+// checks if any user is logged in
+function loggedin() {
+  return isset($_SESSION['username']);
 }
 ?>
