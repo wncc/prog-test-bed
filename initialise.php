@@ -20,12 +20,11 @@
     mysql_select_db($database) or die('Error connecting to database.' . mysql_error());
     // create the users table
     mysql_query("CREATE TABLE IF NOT EXISTS `users` (
-  `sl` int(11) NOT NULL AUTO_INCREMENT,
+  `slno` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(25) NOT NULL,
   `random` varchar(6) NOT NULL,
   `hash` varchar(80) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `status` int(11) NOT NULL DEFAULT '1',
   `score` float NOT NULL,
   PRIMARY KEY (`sl`)
 )");
