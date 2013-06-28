@@ -19,6 +19,8 @@
           echo("<div class=\"alert alert-success span12\">\n New Event Created!\n</div>");
       else if(isset($_GET['updated']))
           echo("<div class=\"alert alert-success span12\">\n Event Updated!\n</div>");
+      else if(isset($_GET['deleted']))
+          echo("<div class=\"alert alert-error span12\">\n An event is deleted \n</div>");
         else if(isset($_GET['passerror']))
           echo("<div class=\"alert alert-error span12\">\nThe old password is incorrect!\n</div>");
         else if(isset($_GET['nerror']))

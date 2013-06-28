@@ -59,5 +59,15 @@
 				header("Location: event.php?updated=1");
 			}
 		}
+
+		else if($_POST['action']=='deleteevent') {
+			// update the event settings
+			if(trim($_POST['id']) == "")
+				header("Location: updateevent.php?derror=1");
+			else {
+				mysql_query("DELETE from events WHERE slno='".$_POST['id']."'") or die($today."   ".mysql_error());
+				header("Location: event.php?deleted=1");
+			}
+		}
 	}
 ?>

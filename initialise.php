@@ -27,7 +27,14 @@
   `email` varchar(100) NOT NULL,
   `score` float NOT NULL,
   PRIMARY KEY (`sl`)
-)");
+  )");
+   mysql_query("CREATE TABLE IF NOT EXISTS `events` (
+  `slno` int(11) NOT NULL AUTO_INCREMENT,
+  `eventname` varchar(25) NOT NULL,
+  `uptime` datetime NOT NULL,
+  `downtime` datetime NOT NULL,
+  PRIMARY KEY (`slno`)
+)") or die('Error creating table.' . mysql_error());
     // create the user 'admin' with password 'admin'
     $random=randomNum(5);
     $pass="admin";

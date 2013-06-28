@@ -34,7 +34,7 @@
   </head>
 
   <body>
-  <script src="http://code.jquery.com/jquery-latest.js"></script>
+  
 <!-- Part 1: Wrap all page content here -->
     <div id="wrap">
 
@@ -64,6 +64,9 @@
           echo("<div class=\"alert alert-success span12\">\n You are updating an event\n</div>");
         else if(isset($_GET['nerror']))
           echo("<div class=\"alert alert-error span12\">\nPlease enter all the details asked before you can continue!\n</div>");
+        else if(isset($_GET['derror']))
+          echo("<div class=\"alert alert-error span12\">\nYou cannot delete unexisting event\n</div>");
+
       ?>
 		<?php include('menu.php'); ?>
 
@@ -142,8 +145,17 @@
               </span>
             </div>
             <p>(Time is configured as hh:mm:ss)</p>
-				    <input class="btn" type="submit" name="submit" value="Update Event"/>
+				    <input class="btn btn-success" type="submit" name="submit" value="Update Event"/>
 	      		</form>
+            <form method="post" action="update.php">
+              <input type="hidden" name="id" <?php 
+              if(isset($_GET['id'])){
+                echo "value=".$_GET['id'];
+              }
+                ?>/>
+              <input type="hidden" name="action" value="deleteevent"/>
+              <input class="btn btn-danger" type="submit" name="submit" value="Delete Event"/>
+            </form>
 	      	</div>
 	    </div>
     </div>
@@ -155,7 +167,7 @@
         <p class="muted credit">Built with love by <a href="about.php">WnCC.</p>
       </div>
     </div>
-   	
+   	<script src="http://code.jquery.com/jquery-latest.js"></script>
     <script type="text/javascript"src="../js/bootstrap.min.js"></script>
     <script type="text/javascript" src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.min.js"></script>
     <script type="text/javascript">
