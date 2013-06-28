@@ -34,6 +34,7 @@
   </head>
 
   <body>
+  <script src="http://code.jquery.com/jquery-latest.js"></script>
 <!-- Part 1: Wrap all page content here -->
     <div id="wrap">
 
@@ -58,7 +59,14 @@
       </div> 
 
 	<div class="container">
+    <?php
+        if(isset($_GET['id']))
+          echo("<div class=\"alert alert-success span12\">\n You are updating an event\n</div>");
+        else if(isset($_GET['nerror']))
+          echo("<div class=\"alert alert-error span12\">\nPlease enter all the details asked before you can continue!\n</div>");
+      ?>
 		<?php include('menu.php'); ?>
+
 		<div class="row-fluid span12">
 			<ul class="nav nav-tabs">
 			    <li><a href="event.php">Events List</a></li>
@@ -68,30 +76,72 @@
 	      	<div class="span12">
 	      		<form method="post" action="update.php">
                   <div class="btn-group">
-                    <button class="btn">Choose Event</button>
+                    <button class="btn" id="dropevent" /></button>
                     <button class="btn dropdown-toggle" data-toggle="dropdown">
                     <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
                     <!-- dropdown menu links -->
+                    <?php
+                // list all the problems
+                $query = "SELECT * FROM events";
+              $result = mysql_query($query);
+              if(mysql_num_rows($result)==0)
+                echo("<li>None</li>\n");
+              else {
+                while($row = mysql_fetch_array($result)) {
+                  if(isset($_GET['id']) and $_GET['id']==$row['slno']) {
+                    $selected = $row;
+                    echo("<li class=\"active\"><a href=\"updateevent.php?id=".$_GET['id']."\">".$row['eventname']."</a></li>\n");
+                  } else
+                    echo("<li><a href=\"updateevent.php?id=".$row['slno']."\">".$row['eventname']."</a></li>\n");
+                }
+              }
+            ?>
                     </ul>
                   </div>
                   <br/>
                   <br/>
-	      			<input type="hidden" name="action" value="settings"/>Name of event: 
-	      			<input name="name" type="text"/><br/>
-	      			<input type="hidden" name="action" value="settings"/>Date and time of event:
-	      			<div id="datetimepicker" class="input-append date">
-				      <input type="text" ></input>
+	      			<input type="hidden" name="action" value="updateevent"/>
+              <input type="hidden" name="id" <?php 
+              if(isset($_GET['id'])){
+                echo "value=".$_GET['id'];
+              }
+                ?>/>Name of event: 
+	      			<input name="name" type="text" <?php 
+              if(isset($_GET['id'])){
+                $query="SELECT eventname from events where slno=".$_GET['id'];
+                $result = mysql_query($query);
+                echo "value='".mysql_result($result, 0)."'";
+              }
+                ?>/><br/>
+	      			<input type="hidden"/>Uptime of event:
+	      			<div id="uptimepicker" class="input-append date">
+				      <input type="text"  name="uptime" <?php 
+              if(isset($_GET['id'])){
+                $query="SELECT uptime from events where slno=".$_GET['id'];
+                $result = mysql_query($query);
+                echo "value='".mysql_result($result, 0)."'";
+              }
+                ?>/>></input>
 				      <span class="add-on">
 				        <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
 				      </span>
 				    </div>
-		          <h1><small>Languages</small></h1>
-			          <input name="c" type="checkbox" /> C<br/>
-					  <input name="cpp" type="checkbox" /> C++<br/>
-					  <input name="java" type="checkbox" /> Java<br/>
-					  <input name="python" type="checkbox"/> Python<br/><br/>
+            <input type="hidden"/>Downtime of event:
+              <div id="downtimepicker" class="input-append date">
+              <input type="text"  name="downtime"<?php 
+              if(isset($_GET['id'])){
+                $query="SELECT downtime from events where slno=".$_GET['id'];
+                $result = mysql_query($query);
+                echo "value='".mysql_result($result, 0)."'";
+              }
+                ?>/>></input>
+              <span class="add-on">
+                <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+              </span>
+            </div>
+            <p>(Time is configured as hh:mm:ss)</p>
 				    <input class="btn" type="submit" name="submit" value="Update Event"/>
 	      		</form>
 	      	</div>
@@ -105,14 +155,29 @@
         <p class="muted credit">Built with love by <a href="about.php">WnCC.</p>
       </div>
     </div>
-   	<script src="http://code.jquery.com/jquery-latest.js"></script>
+   	
     <script type="text/javascript"src="../js/bootstrap.min.js"></script>
     <script type="text/javascript" src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.min.js"></script>
     <script type="text/javascript">
-      $('#datetimepicker').datetimepicker({
-        format: 'dd/MM/yyyy hh:mm:ss',
+      $('#uptimepicker').datetimepicker({
+        format: 'yyyy-MM-dd hh:mm:ss',
+      });
+      $('#downtimepicker').datetimepicker({
+        format: 'yyyy-MM-dd hh:mm:ss',
       });
     </script>
+    <?php 
+              if(isset($_GET['id'])){
+                $query="SELECT eventname from events where slno=".$_GET['id'];
+                $result = mysql_query($query);
+              echo '<script type="text/javascript">
+                $("#dropevent").html("'.mysql_result($result, 0).'");</script>';
+              }
+              else{
+                echo '<script type="text/javascript">
+                $("#dropevent").html("Choose Event");</script>';
+              }
+                ?>
   </body>
   </html>
 

@@ -58,6 +58,11 @@
       </div> 
 
 	<div class="container">
+    <?php
+        
+        if(isset($_GET['nerror']))
+          echo("<div class=\"alert alert-error span12\">\nPlease enter all the details asked before you can continue!\n</div>");
+      ?>
 		<?php include('menu.php'); ?>
 		<div class="row-fluid span12">
 			<ul class="nav nav-tabs">
@@ -67,26 +72,30 @@
 	      	</ul>
 	      	<div class="span12">
 	      		<form method="post" action="update.php">
-	      			<input type="hidden" name="action" value="settings"/>Name of event: 
-	      			<input name="name" type="text"/><br/>
-	      			<input type="hidden" name="action" value="settings"/>Date and time of event:
-	      			<div id="datetimepicker" class="input-append date">
-				      <input type="text" ></input>
+	      			<input type="hidden" name="action" value="createevent"/>
+              Name of event: <input name="name" type="text"/><br/>
+	      			Uptime of event:
+	      			<div id="uptimepicker" class="input-append date">
+				      <input type="text" name="uptime"></input>
 				      <span class="add-on">
 				        <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
 				      </span>
 				    </div>
-		          <h1><small>Languages</small></h1>
-			          <input name="c" type="checkbox" /> C<br/>
-					  <input name="cpp" type="checkbox" /> C++<br/>
-					  <input name="java" type="checkbox" /> Java<br/>
-					  <input name="python" type="checkbox"/> Python<br/><br/>
-				    <input class="btn" type="submit" name="submit" value="Save Settings"/>
+            <p>(Time is configured as hh:mm:ss)</p>
+            Downtime of event:
+              <div id="downtimepicker" class="input-append date">
+              <input type="text" name="downtime"></input>
+              <span class="add-on">
+                <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+              </span>
+            </div>
+				    <input class="btn" type="submit" name="submit" value="Create Event"/>
 	      		</form>
 	      		<p text-align="center"> You can add problems from the add problem category and tag it for this particular event</p>
 	      	</div>
 	    </div>
     </div>
+    <div id="push"></div>
    </div>
    <div id="footer">
       <div class="container">
@@ -97,8 +106,11 @@
     <script type="text/javascript"src="../js/bootstrap.min.js"></script>
     <script type="text/javascript" src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.min.js"></script>
     <script type="text/javascript">
-      $('#datetimepicker').datetimepicker({
-        format: 'dd/MM/yyyy hh:mm:ss',
+      $('#uptimepicker').datetimepicker({
+        format: 'yyyy-MM-dd hh:mm:ss',
+      });
+      $('#downtimepicker').datetimepicker({
+        format: 'yyyy-MM-dd hh:mm:ss',
       });
     </script>
   </body>

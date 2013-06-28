@@ -35,5 +35,29 @@
 					header("Location: index.php?passerror=1");
 			}
 		}
+
+		else if($_POST['action']=='createevent') {
+			// update the event settings
+			if(trim($_POST['name']) == "")
+				header("Location: createevent.php?nerror=1");
+			else {
+				if($_POST['uptime']=="") $today = date("Y-m-d H:i:s"); else $today=$_POST['uptime'];
+				if($_POST['downtime']=="") $later = "2020-10-10 17:16:18"; else $later=$_POST['downtime'];
+				mysql_query("INSERT into `events` (`eventname`,`uptime`,`downtime`) VALUES ('".mysql_real_escape_string($_POST['name'])."','".$today ."','".$later."')") or die($today."   ".mysql_error());
+				header("Location: event.php?created=1");
+			}
+		}
+		else if($_POST['action']=='updateevent') {
+			// update the event settings
+			if(trim($_POST['name']) == "")
+				header("Location: updateevent.php?nerror=1");
+			else {
+				$name=trim($_POST['name']);
+				if($_POST['uptime']=="") $today = date("Y-m-d H:i:s"); else $today=$_POST['uptime'];
+				if($_POST['downtime']=="") $later = "2020-10-10 17:16:18"; else $later=$_POST['downtime'];
+				mysql_query("UPDATE events SET eventname='$name', uptime='$today', downtime='$later' WHERE slno='".$_POST['id']."'") or die($today."   ".mysql_error());
+				header("Location: event.php?updated=1");
+			}
+		}
 	}
 ?>
