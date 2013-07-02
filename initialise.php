@@ -35,6 +35,36 @@
   `downtime` datetime NOT NULL,
   PRIMARY KEY (`slno`)
 )") or die('Error creating table.' . mysql_error());
+
+   mysql_query("CREATE TABLE IF NOT EXISTS `problems` (
+    `probid` int(11) NOT NULL AUTO_INCREMENT,
+    `eventid` int(11) NOT NULL DEFAULT 0,
+    `heading` text NOT NULL,
+    `description` text NOT NULL,
+    `points` int NOT NULL DEFAULT 0,
+    `timelimit` int NOT NULL DEFAULT 300,
+    `input1` text NOT NULL,
+    `output1` text NOT NULL,
+    PRIMARY KEY (`probid`))") or die('Error creating table "problems".' . mysql_error());
+
+  mysql_query("CREATE TABLE IF NOT EXISTS `testcases` (
+    `probid` int(11) NOT NULL,
+    `caseid` int(11) NOT NULL AUTO_INCREMENT,
+    `input` text NOT NULL,
+    `output` text NOT NULL,
+    `judge` varchar(50) NOT NULL,
+    PRIMARY KEY (`caseid`)
+    )") or die('Error creating table harami "testcases".' . mysql_error());
+
+  mysql_query("CREATE TABLE IF NOT EXISTS `problempref` (
+    `probid` int(11) NOT NULL,
+    `c` tinyint(1) NOT NULL DEFAULT 0,
+    `c++` tinyint(1) NOT NULL DEFAULT 0,
+    `java` tinyint(1) NOT NULL DEFAULT 0,
+    `python` tinyint(1) NOT NULL DEFAULT 0,
+    PRIMARY KEY (`probid`)
+    )") or die('Error creating table "problem pref".' . mysql_error());
+
     // create the user 'admin' with password 'admin'
     $random=randomNum(5);
     $pass="admin";

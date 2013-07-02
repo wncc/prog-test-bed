@@ -47,6 +47,35 @@
 				header("Location: event.php?created=1");
 			}
 		}
+		else if($_POST['action']=='addproblem') {
+			// update the event settings
+			if(trim($_POST['title']) == "" || trim($_POST['problem']) == "" || trim($_POST['timelimit']) == "")
+				header("Location: addproblem.php?nerror=1");
+			else {
+				mysql_query("INSERT into `problems` (`eventname`,`heading`,`description`,`points`,`timelimit`,`input1`,`output1`) VALUES ('".mysql_real_escape_string($_POST['eventname'])."','".mysql_real_escape_string($_POST['title'])."','".trim(mysql_real_escape_string($_POST['problem']))."','"
+					.mysql_real_escape_string($_POST['points'])."','".mysql_real_escape_string($_POST['timelimit'])."','".trim(mysql_real_escape_string($_POST['samplei']))."','".trim(mysql_real_escape_string($_POST['sampleo']))."')") or die($today."   ".mysql_error());
+				$query = "SELECT probid from problems where heading='".mysql_real_escape_string($_POST['title'])."'";
+				$result = mysql_query($query);
+				$id=mysql_result($result, 0);
+				//echo "excated if=d is". $id;
+				header("Location: addproblem.php?pid=".$id);
+			}
+		}
+		else if($_POST['action']=='editproblem') {
+			$timelimit=mysql_real_escape_string($_POST['timelimit']);
+			$eventname=mysql_real_escape_string($_POST['eventname']);
+			$heading=mysql_real_escape_string($_POST['title']);
+			$description=trim(mysql_real_escape_string($_POST['problem']));
+			$points=mysql_real_escape_string($_POST['points']);
+			$input1=trim(mysql_real_escape_string($_POST['samplei']));
+			$output1=trim(mysql_real_escape_string($_POST['sampleo']));
+			if($eventname==""){
+					mysql_query("UPDATE problems SET heading='$heading', description='$description', points='$points', timelimit='$timelimit', input1='$input1',output1='$output1' where probid='".$_POST['ids']."'") or die(mysql_error());
+			}
+			else mysql_query("UPDATE problems SET eventname='$eventname' , heading='$heading', description='$description', points='$points', timelimit='$timelimit', input1='$input1',output1='$output1' where probid='".$_POST['ids']."'") or die(mysql_error());
+			
+			header("Location: addproblem.php?pid=".$_POST['ids']);
+		}
 		else if($_POST['action']=='updateevent') {
 			// update the event settings
 			if(trim($_POST['name']) == "")
@@ -69,5 +98,85 @@
 				header("Location: event.php?deleted=1");
 			}
 		}
+		else if($_POST['action']=='addtest') {
+			$input;
+			$output;
+			// update the event settings
+			if(trim($_POST['pid']) == "")
+				header("Location: addproblem.php?iderror=1");
+			else {
+				//if they DID upload a file...
+			if($_FILES['input']['name'])
+			{
+				//if no errors...
+				if(!$_FILES['input']['error'])
+				{
+					//now is the time to modify the future file name and validate the file
+					$new_file_name = strtolower($_FILES['input']['tmp_name']); //rename file
+					$valid_file=true;
+					if($_FILES['input']['size'] > (1024000)) //can't be larger than 1 MB
+					{
+						$valid_file = false;
+						$message = 'Oops!  Your file\'s size is to large.';
+					}
+					
+					//if the file has passed the test
+					if($valid_file)
+					{
+						//move it to where we want it to be
+						$target_path = "upload/";
+
+						$target_path = $target_path . "input".$_POST['id']; 
+
+						if(move_uploaded_file($_FILES['input']['tmp_name'], $target_path)) {
+							$input=$_FILES['input']['size'];
+						    
+						} else{
+						    header("Location: addproblem.php?uperror=1");
+						}
+					}
+				
+				}
+
+			
+			}
+
+
+			if($_FILES['output']['name'])
+			{
+				//if no errors...
+				if(!$_FILES['output']['error'])
+				{
+					//now is the time to modify the future file name and validate the file
+					$new_file_name = strtolower($_FILES['output']['tmp_name']); //rename file
+					$valid_file=true;
+					if($_FILES['output']['size'] > (1024000)) //can't be larger than 1 MB
+					{
+						$valid_file = false;
+						$message = 'Oops! Your file\'s size is to large.';
+					}
+					
+					//if the file has passed the test
+					if($valid_file)
+					{
+						//move it to where we want it to be
+						$target_path = "upload/";
+
+						$target_path = $target_path . "output".$_POST['id']; 
+
+						if(move_uploaded_file($_FILES['output']['tmp_name'], $target_path)){
+							$output=$_FILES['output']['size'];
+						} else{
+						    header("Location: addproblem.php?uperror=1");
+						}
+					}
+				
+				}
+			}
+
+			mysql_query("INSERT into `testcases` (`input`,`output`,`judge`,`probid`) VALUES ('".$input."','".$output."','".$_POST['judgename']."','".$_POST['pid']."')") or die(mysql_error());
+			header("Location: addproblem.php?pid=".$_POST['pid']."&test=1");
+		}
 	}
+}
 ?>
