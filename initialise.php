@@ -26,7 +26,7 @@
   `hash` varchar(80) NOT NULL,
   `email` varchar(100) NOT NULL,
   `score` float NOT NULL,
-  PRIMARY KEY (`sl`)
+  PRIMARY KEY (`slno`)
   )");
    mysql_query("CREATE TABLE IF NOT EXISTS `events` (
   `slno` int(11) NOT NULL AUTO_INCREMENT,
