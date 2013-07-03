@@ -53,11 +53,17 @@
 				header("Location: addproblem.php?nerror=1");
 			else {
 				mysql_query("INSERT into `problems` (`eventname`,`heading`,`description`,`points`,`timelimit`,`input1`,`output1`) VALUES ('".mysql_real_escape_string($_POST['eventname'])."','".mysql_real_escape_string($_POST['title'])."','".trim(mysql_real_escape_string($_POST['problem']))."','"
-					.mysql_real_escape_string($_POST['points'])."','".mysql_real_escape_string($_POST['timelimit'])."','".trim(mysql_real_escape_string($_POST['samplei']))."','".trim(mysql_real_escape_string($_POST['sampleo']))."')") or die($today."   ".mysql_error());
+					.mysql_real_escape_string($_POST['points'])."','".mysql_real_escape_string($_POST['timelimit'])."','".trim(mysql_real_escape_string($_POST['samplei']))."','".trim(mysql_real_escape_string($_POST['sampleo']))."')") or die(mysql_error());
 				$query = "SELECT probid from problems where heading='".mysql_real_escape_string($_POST['title'])."'";
 				$result = mysql_query($query);
 				$id=mysql_result($result, 0);
-				//echo "excated if=d is". $id;
+				
+				if($_POST['c']=='on') $c=1; else $c=0;
+				if($_POST['cpp']=='on') $cpp=1; else $cpp=0;
+				if($_POST['java']=='on') $java=1; else $java=0;
+				if($_POST['python']=='on') $python=1; else $python=0;
+
+				mysql_query("INSERT into `problempref` (`probid`,`c`,`cpp`,`java`,`python`) values ('".$id."','".$c."','".$cpp."','".$java."','".$python."')") or die(mysql_error());
 				header("Location: addproblem.php?pid=".$id);
 			}
 		}
@@ -69,11 +75,18 @@
 			$points=mysql_real_escape_string($_POST['points']);
 			$input1=trim(mysql_real_escape_string($_POST['samplei']));
 			$output1=trim(mysql_real_escape_string($_POST['sampleo']));
+			if($_POST['c']=='on') $c=1; else $c=0;
+			if($_POST['cpp']=='on') $cpp=1; else $cpp=0;
+			if($_POST['java']=='on') $java=1; else $java=0;
+			if($_POST['python']=='on') $python=1; else $python=0;
 			if($eventname==""){
 					mysql_query("UPDATE problems SET heading='$heading', description='$description', points='$points', timelimit='$timelimit', input1='$input1',output1='$output1' where probid='".$_POST['ids']."'") or die(mysql_error());
+					mysql_query("UPDATE problempref SET c='$c' , cpp='$cpp', java='$java',python='$python' where probid='".$_POST['ids']."'")or die(mysql_error());
 			}
-			else mysql_query("UPDATE problems SET eventname='$eventname' , heading='$heading', description='$description', points='$points', timelimit='$timelimit', input1='$input1',output1='$output1' where probid='".$_POST['ids']."'") or die(mysql_error());
-			
+			else {
+				mysql_query("UPDATE problems SET eventname='$eventname' , heading='$heading', description='$description', points='$points', timelimit='$timelimit', input1='$input1',output1='$output1' where probid='".$_POST['ids']."'") or die(mysql_error());
+				mysql_query("UPDATE problempref SET c='$c' , cpp='$cpp', java='$java',python='$python' where probid='".$_POST['ids']."'")or die(mysql_error());
+			}
 			header("Location: addproblem.php?pid=".$_POST['ids']);
 		}
 		else if($_POST['action']=='updateevent') {

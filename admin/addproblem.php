@@ -76,8 +76,11 @@ namespace Michelf;
 	      	</ul>
     	</div>
     	<div class="row-fluid span12">
-    		 <h1><small>Add a Problem</small></h1>
-    		 <form method="post" action="update.php">
+    		 <h1><small><?php if (isset($_GET['pid'])){
+               echo "Edit a problem";
+             } else { echo "Add a problem";
+             } ?></small></h1>
+    		 <form method="post" id="addproblem" action="update.php">
          		 <input type="hidden" name="action" 
              <?php if (isset($_GET['pid'])){
                echo "value='editproblem'";
@@ -139,8 +142,18 @@ namespace Michelf;
                 $result=mysql_query($query);
                 $problemdata=mysql_fetch_assoc($result, 0);
                 echo $problemdata['eventname'];
+
+            $query2 = "SELECT c, cpp, java, python FROM problempref where probid=".$_GET['pid'];
+            $result2 = mysql_query($query2)or die(mysql_error());
+            $fields = mysql_fetch_assoc($result2,0);
+
               }
-              else echo "Select Event";
+              else{ echo "Select Event";
+            $fields['c']=0;
+            $fields['cpp']=0;
+            $fields['java']=0;
+            $fields['python']=0;
+          }
               ?>
                     <span class="caret"></span>
                   </a>
@@ -148,7 +161,7 @@ namespace Michelf;
                     <!-- dropdown menu links -->
                     <?php
                 // list all the problems
-                $query = "SELECT * FROM events";
+              $query = "SELECT * FROM events";
               $result = mysql_query($query);
               if(mysql_num_rows($result)==0)
                 echo("<li>None</li>\n");
@@ -166,10 +179,10 @@ namespace Michelf;
                   </div><br/><br/>
                   <input name="eventname" type="hidden" id="formeventinput"/>
 				<h1><small>Languages</small></h1>
-			          <input name="c" type="checkbox" /> C<br/>
-					  <input name="cpp" type="checkbox" /> C++<br/>
-					  <input name="java" type="checkbox" /> Java<br/>
-					  <input name="python" type="checkbox"/> Python<br/><br/>
+			      <input name="c" type="checkbox" <?php if($fields['c']==1) echo("checked=\"true\"");?>/> C<br/>
+					  <input name="cpp" type="checkbox" <?php if($fields['cpp']==1) echo("checked=\"true\"");?>/> C++<br/>
+					  <input name="java" type="checkbox" <?php if($fields['java']==1) echo("checked=\"true\"");?>/> Java<br/>
+					  <input name="python" type="checkbox" <?php if($fields['python']==1) echo("checked=\"true\"");?>/> Python<br/><br/>
 				Detailed problem: <span class="label label-info">Markdown formatting supported</span></br/><br/>
 				 <textarea style="width:785px; height:400px;" name="problem" id="text"
          required><?php
@@ -197,7 +210,7 @@ namespace Michelf;
   }
 ?></textarea><br/>
 				 </div>
-				 <input class="btn btn-primary btn-large" type="submit" value="Update Problem"/>
+				 <input class="btn btn-primary btn-large" type="submit" value="<?php if(isset($_GET['pid'])){echo "Update Problem";} else echo "Save Problem"; ?>"/>
          		 <input class="btn btn-large" type="button" value="Preview" onclick="$('#preview').load('markdown-preview.php', {action: 'preview', title: $('#title').val(), text: $('#text').val()});"/>
          		 <input class="btn btn-danger btn-large" type="button" value="Delete Problem" onclick="window.location='update.php?action=delete&id='+$('#id').val();"/>
           	</form>
@@ -313,10 +326,13 @@ namespace Michelf;
 
            });
 
-        var url = document.location.toString();
-        if (url.match('#')) {
-            $('.nav-tabs a[href=#tab2]').tab('show') ;
-        } 
+        $("#addproblem").submit(function(){
+    var checked = $("#addproblem input:checked").length > 0;
+    if (!checked){
+        alert("Please select atleast one Programming Language");
+        return false;
+    }
+});
 
       }); </script>
 </body>

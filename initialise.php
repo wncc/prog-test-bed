@@ -59,7 +59,7 @@
   mysql_query("CREATE TABLE IF NOT EXISTS `problempref` (
     `probid` int(11) NOT NULL,
     `c` tinyint(1) NOT NULL DEFAULT 0,
-    `c++` tinyint(1) NOT NULL DEFAULT 0,
+    `cpp` tinyint(1) NOT NULL DEFAULT 0,
     `java` tinyint(1) NOT NULL DEFAULT 0,
     `python` tinyint(1) NOT NULL DEFAULT 0,
     PRIMARY KEY (`probid`)
