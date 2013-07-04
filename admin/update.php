@@ -111,6 +111,16 @@
 				header("Location: event.php?deleted=1");
 			}
 		}
+		else if($_POST['action']=='deleteproblem') {
+			// update the event settings
+			if(trim($_POST['id']) == "")
+				header("Location: addproblem.php?derror=1");
+			else {
+				mysql_query("DELETE from problems WHERE probid='".$_POST['pid']."'") or die(mysql_error());
+				mysql_query("DELETE from problempref WHERE probid='".$_POST['pid']."'") or die(mysql_error());
+				header("Location: addproblem.php?deleted=1");
+			}
+		}
 		else if($_POST['action']=='addtest') {
 			$input;
 			$output;

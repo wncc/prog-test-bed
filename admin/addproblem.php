@@ -63,10 +63,17 @@ namespace Michelf;
   <?php
       if(isset($_GET['test']))
           echo("<div class=\"alert alert-success span12\">\n Test Case Successfully added\n</div>");
+        else  if(isset($_GET['edit']))
+          echo("<div class=\"alert alert-success span12\">\n You are editing a problem \n</div>");
       else  if(isset($_GET['pid']))
           echo("<div class=\"alert alert-success span12\">\n Your Problem was added! You can update any entries if you wish and resubmit the data.\n Please head over and add testcases \n</div>");
       else if(isset($_GET['uperror']))
           echo("<div class=\"alert alert-success span12\">\n Error while uploading please try again!\n</div>");
+       else if(isset($_GET['deleted']))
+          echo("<div class=\"alert alert-error span12\">\n The problem is successfully deleted \n</div>");
+        else if(isset($_GET['derror']))
+          echo("<div class=\"alert alert-error span12\">\n You can delete an existing problem only. \n</div>");
+      
       ?>
 		<?php include('menu.php'); ?>
 		<div class="row-fluid span12">
@@ -212,8 +219,19 @@ namespace Michelf;
 				 </div>
 				 <input class="btn btn-primary btn-large" type="submit" value="<?php if(isset($_GET['pid'])){echo "Update Problem";} else echo "Save Problem"; ?>"/>
          		 <input class="btn btn-large" type="button" value="Preview" onclick="$('#preview').load('markdown-preview.php', {action: 'preview', title: $('#title').val(), text: $('#text').val()});"/>
-         		 <input class="btn btn-danger btn-large" type="button" value="Delete Problem" onclick="window.location='update.php?action=delete&id='+$('#id').val();"/>
-          	</form>
+         		</form> 
+            <br/> <br/>
+            <form method="post" action="update.php">
+            <input type="hidden" name="id" <?php 
+              if(isset($_GET['pid'])){
+                echo "value=".$_GET['pid'];
+              }
+                ?>/>
+              <input type="hidden" name="action" value="deleteproblem"/>
+              <input class="btn btn-danger btn-large" type="submit" name="submit" value="Delete Problem"/>
+            </form>
+             
+          	
 				</div>
 			<div class="tab-pane" id="tab2">
         <?php
