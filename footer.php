@@ -2,7 +2,7 @@
 /*
  * Footer for all pages
  */
-?>
+?>  <div id="push"></div>
     </div> <!-- /wrap -->
     <div id="footer">
       <div class="container">
