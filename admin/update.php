@@ -124,10 +124,14 @@
 		else if($_POST['action']=='addtest') {
 			$input;
 			$output;
+
 			// update the event settings
 			if(trim($_POST['pid']) == "")
 				header("Location: addproblem.php?iderror=1");
 			else {
+				$result=mysql_query("SELECT t.caseid FROM testcases t WHERE t.caseid = (select max(t2.caseid) from testcases t2 where t2.probid = '".$_POST['pid']."')");
+				$data=mysql_result($result,0);
+				$data+=1;
 				//if they DID upload a file...
 			if($_FILES['input']['name'])
 			{
@@ -149,7 +153,7 @@
 						//move it to where we want it to be
 						$target_path = "upload/";
 
-						$target_path = $target_path . "input".$_POST['id']; 
+						$target_path = $target_path . "input-pid-".$_POST['pid']."-caseid-".$data; 
 
 						if(move_uploaded_file($_FILES['input']['tmp_name'], $target_path)) {
 							$input=$_FILES['input']['size'];
@@ -185,7 +189,7 @@
 						//move it to where we want it to be
 						$target_path = "upload/";
 
-						$target_path = $target_path . "output".$_POST['id']; 
+						$target_path = $target_path . "output-pid-".$_POST['pid']."-caseid-".$data; 
 
 						if(move_uploaded_file($_FILES['output']['tmp_name'], $target_path)){
 							$output=$_FILES['output']['size'];
