@@ -10,7 +10,13 @@ use \Michelf\Markdown;
 		include('header.php');
 		connectdb();
 ?>
-<div class="container containeer-fluid">
+<div class="container">
+	<?php
+        if(isset($_GET['changed']))
+          echo("<div class=\"alert alert-info\">\nAccount details changed successfully!\n</div>");
+        else if(isset($_GET['nerror']))
+          echo("<div class=\"alert alert-error\">\nPlease enter all the details asked before you can continue!\n</div>");
+      ?>
 
 <?php
 include('menu.php');
@@ -27,6 +33,8 @@ include('menu.php');
 		    </div>
 		</div>
 		<div class="span7"> 
+			<br/>
+			<br/>
 			<p align="center"> Following are the ongoing events. You can enter them to solve the problems: </p>
 			<ul class="nav nav-list">
         	<li class="nav-header">ONGOING EVENTS</li>

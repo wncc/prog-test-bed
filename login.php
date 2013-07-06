@@ -22,8 +22,8 @@
 					header("Location: index.php");
 
 				} else
-					//header("Location: login.php?error=1");
-					echo $currhash;
+					header("Location: login.php?error=1");
+					
 			}
 		} else if($_POST['action']=='ldaplogin'){
 			$ldap_uid = strip_tags($_POST['username']);

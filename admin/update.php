@@ -1,9 +1,5 @@
 <?php
 /*
- * Codejudge
- * Copyright 2012, Sankha Narayan Guria (sankha93@gmail.com)
- * Licensed under MIT License.
- *
  * script that performs some database operations
  */
 	include('../functions.php');
@@ -22,7 +18,7 @@
 			if(trim($_POST['oldpass']) == "" or trim($_POST['newpass']) == "")
 				header("Location: index.php?nerror=1");
 			else {
-				$query = "SELECT random,hash FROM users WHERE username='admin'";
+				$query = "SELECT random,hash FROM users WHERE username='".$_SESSION['username']."'";
 				$result = mysql_query($query);
 				$fields = mysql_fetch_array($result);
 				$currhash = crypt($_POST['oldpass'], $fields['random']);
