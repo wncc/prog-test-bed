@@ -27,8 +27,29 @@ include('menu.php');
 		    </div>
 		</div>
 		<div class="span7"> 
-			<p align="center"> Following are the problems which are available to solve: </p>
+			<p align="center"> Following are the ongoing events. You can enter them to solve the problems: </p>
+			<ul class="nav nav-list">
+        	<li class="nav-header">ONGOING EVENTS</li>
+			<?php
+        	// list all the ongoing events from the database
+        	$today = date("Y-m-d H:i:s");
+        	$query = "SELECT * FROM events where (downtime >='".$today."' AND uptime <='".$today."'  )";
+          	$result = mysql_query($query);
+          	if(mysql_num_rows($result)==0)
+			      echo("<li>No events are ongoing currently</li>\n"); // no events are there
+		else { 
+			$i=1;
+			while($row = mysql_fetch_array($result)) {
 
+       			echo("<li><a href=\"event.php?eid=".$row['slno']."\">".$i." ) ".$row['eventname']."</a></li>\n");
+		       $i++;
+		   }
+		}
+		?>
+      </ul>
+      <br/>
+      <hr>
+			<p align="center"> Following are the problems which are available to solve: </p>
 			<ul class="nav nav-list">
         <li class="nav-header">AVAILABLE PROBLEMS</li>
         <?php
@@ -79,7 +100,7 @@ include('menu.php');
         $query = "SELECT * FROM solve WHERE(status=2 AND probid='".$selected['probid']."')";
         $result = mysql_query($query);
         $solve = mysql_num_rows($result);
-        $query = "SELECT * FROM solve WHERE(status=2 AND probid='".$selected['probid']."')";
+        $query = "SELECT * FROM solve WHERE(status=1 AND probid='".$selected['probid']."')";
         $result = mysql_query($query);
         $attempt = mysql_num_rows($result);
       ?>

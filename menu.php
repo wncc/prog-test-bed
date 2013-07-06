@@ -21,7 +21,9 @@
               <li class="divider-vertical"></li>
               <li><a href="problems.php"><i class="icon-pencil"></i> Problems </a></li>
               <li class="divider-vertical"></li>
-              <li><a href="users.php"><i class="icon-list"></i> Scorecard</a></li>
+              <li><a href="scorecard.php"><i class="icon-list"></i> Scorecard</a></li>
+              <li class="divider-vertical"></li>
+              <li><a href="scorecard.php"><i class="icon-list"></i> Leaderboard</a></li>
               <li class="divider-vertical"></li>
               <li><a href="settings.php"><i class="icon-wrench"></i> Account Settings</a></li>
               <li class="divider-vertical"></li>
