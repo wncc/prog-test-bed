@@ -1,3 +1,4 @@
 # prog-test-bed .gitignore
 *~
 dbinfo.php
+admin/upload/*
