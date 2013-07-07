@@ -1,6 +1,6 @@
 <?php
 /*
- * The landing page that lists all the problem
+ * The Event page that lists all the events categorised as Upcoming, Ongoing, Archived
  */
 	require_once('functions.php');
 	if(!loggedin())
@@ -9,7 +9,7 @@
 		include('header.php');
 		connectdb();
 ?>
-<div class="container containeer-fluid">
+<div class="container container-fluid">
 
 <?php
 include('menu.php');
@@ -28,27 +28,50 @@ include('menu.php');
 		<div class="span8"> 
 			<?php
 			if(isset($_GET['eid'])) {
-				$query="SELECT `eventname` from events where slno=".$_GET['eid'];
+				$query="SELECT * from events where slno=".$_GET['eid'];
 				$result=mysql_query($query);
-				$name=mysql_result($result, 0);
-				$query="SELECT * from problems where eventname='".$name."'";
+				$event=mysql_fetch_assoc($result);
+				$query="SELECT * from problems where eventname='".$event['eventname']."'";
 				$result=mysql_query($query);
-				echo '<h1 align="center"><small>'.$name.'</small></h1><br>';
-				echo'<ul class="nav nav-list">
-	        	<li class="nav-header">Problem List </li>';
+				$today = date("Y-m-d H:i:s");
+				$uptime=$event['uptime'];
+				$downtime=$event['downtime'];
+				echo '<h1 align="center"><small>'.$event['eventname'].'</small></h1><br>';
+				echo '<p class="lead text-center"><small>The event starts on <strong>'.$event['uptime'].'</strong> and closes on <strong>'.$event['downtime']."</strong></small></p> <br>";
+					if($uptime<=$today){	
+						if($today > $downtime){
+							echo '<p class="text-center"> This event is now archived, you can still view the problems but submissions are closed </p> <br/>';
+						}	
+						echo'<ul class="nav nav-list">
+			        	<li class="nav-header">Problem List </li>';
 
-	        	if(mysql_num_rows($result)==0)
-			      echo("<li>No problems are tagged in this event</li>\n"); // no events are there
-				else { 
-					$i=1;
-					while($row = mysql_fetch_array($result)) {
+			        	if(mysql_num_rows($result)==0)
+					      echo("<li>No problems are tagged in this event</li>\n"); // no events are there
+						else { 
+							$i=1;
+							while($row = mysql_fetch_array($result)) {
+								$sql = "SELECT status FROM solve WHERE (username='".$_SESSION['username']."' AND probid='".$row['probid']."')";
+								$res = mysql_query($sql);
+								$tag = "";
+								// decide the attempted or solve tag
+								if(mysql_num_rows($res) !== 0) {
+									$r = mysql_fetch_array($res);
+									if($r['status'] == 1)
+										$tag = " <span class=\"label label-warning\">Attempted</span>";
+									else if($r['status'] == 2)
+										$tag = " <span class=\"label label-success\">Solved</span>";
+								}
+								else $tag = " <span class=\"label label-warning\">Unsolved</span>";
+				       			echo("<li><a href=\"problem.php?eid=".$_GET['eid']."&pid=".$row['probid']."\">".$i." ) ".$row['heading']." ".$tag."</a></li>\n");
+						       $i++;
+						   }
+						}
 
-		       			echo("<li><a href=\"problem.php?eid=".$_GET['eid']."&pid=".$row['probid']."\">".$i." ) ".$row['heading']."</a></li>\n");
-				       $i++;
-				   }
-				}
-
-				echo '</ul> <br> <hr>';
+						echo '</ul> <br> <hr>';
+					}
+					else{
+						echo "<p class='text-center'>This event is not yet live, you can check back this region later for its problems </p> <br/>"; 
+					}
 
 			}
 			?>
@@ -82,7 +105,7 @@ include('menu.php');
         	$query = "SELECT * FROM events where uptime >'".$today."'";
           	$result = mysql_query($query);
           	if(mysql_num_rows($result)==0)
-			      echo("<li>No events are ongoing currently</li>\n"); // no events are there
+			      echo("<li>No upcoming events scheduled currently</li>\n"); // no events are there
 		else { 
 			$i=1;
 			while($row = mysql_fetch_array($result)) {
@@ -103,7 +126,7 @@ include('menu.php');
         	$query = "SELECT * FROM events where downtime < '".$today."'";
           	$result = mysql_query($query);
           	if(mysql_num_rows($result)==0)
-			      echo("<li>No events are ongoing currently</li>\n"); // no events are there
+			      echo("<li>No events are present in the archive</li>\n"); // no events are there
 		else { 
 			$i=1;
 			while($row = mysql_fetch_array($result)) {
