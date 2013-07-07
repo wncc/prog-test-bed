@@ -61,7 +61,11 @@ include('menu.php');
 			<ul class="nav nav-list">
         <li class="nav-header">AVAILABLE PROBLEMS</li>
         <?php
-        	// list all the problems from the database
+        	// list all the practice problems from the database
+        	$query="SELECT `slno` from events where eventname='Open Problem Event'";
+        	$result=mysql_query($query);
+        	$id=mysql_result($result,0);
+
         	$query = "SELECT * FROM problems where eventname='Open Problem Event'";
           	$result = mysql_query($query);
           	if(mysql_num_rows($result)==0)
@@ -79,44 +83,15 @@ include('menu.php');
 					else if($r['status'] == 2)
 						$tag = " <span class=\"label label-success\">Solved</span>";
 				}
-				if(isset($_GET['id']) and $_GET['id']==$row['probid']) {
-					$selected = $row;
-					echo("<li class=\"active\"><a href=\"#\">".$i." ) ".$row['heading'].$tag."</a></li>\n");
-        } 
-        else
-          	echo("<li><a href=\"index.php?id=".$row['probid']."\">".$i." ) ".$row['heading'].$tag."</a></li>\n");
-      $i++;}
+				else $tag = " <span class=\"label label-warning\">Unsolved</span>";
+				
+          		echo("<li><a href=\"problem.php?eid=".$id."&pid=".$row['probid']."\">".$i." ) ".$row['heading']." ".$tag."</a></li>\n");
+      			$i++;
+      		}
 		}
 	?>
       </ul>
-      <?php
-        // if any problem is selected then list its details parsed by Markdown
-      	if(isset($_GET['id'])) {
-      		include('markdown.php');
-		$des = Markdown::defaultTransform($selected['description']);
-		$in = Markdown::defaultTransform($selected['input1']);
-		$out = Markdown::defaultTransform($selected['output1']);
-		echo("<hr/>\n<h1>".$selected['heading']."</h1>\n");
-		echo($des."<h3>Sample Input </h3>");
-		echo($in."<h3> Sample Output </h3> ")
-      ?>
       <br/>
-      <form action="solve.php" method="get">
-      <input type="hidden" name="id" value="<?php echo($selected['probid']);?>"/>
-      <?php
-        // number of people who have solved the problem
-        $query = "SELECT * FROM solve WHERE(status=2 AND probid='".$selected['probid']."')";
-        $result = mysql_query($query);
-        $solve = mysql_num_rows($result);
-        $query = "SELECT * FROM solve WHERE(status=1 AND probid='".$selected['probid']."')";
-        $result = mysql_query($query);
-        $attempt = mysql_num_rows($result);
-      ?>
-      <input class="btn btn-primary btn-large" type="submit" value="Solve"/> <span class="badge badge-info"><?php echo($solve);?></span> have solved the problem and <span class="badge badge-info"><?php echo($attempt);?></span> have attempted the problem.
-      </form>
-      <?php
-	}
-      ?>
 		</div>
 		<div class="span3">
 			<h2 align="center"><small>Upcoming Events </small></h2>

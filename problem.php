@@ -54,7 +54,9 @@ include('menu.php');
 						else if($r['status'] == 2)
 							$tag = " <span class=\"label label-success\">Solved</span>";
 					}
-						echo "<h1 align='center'><small>".$time['eventname']." </small></h1><hr/>";
+					else $tag = " <span class=\"label label-warning\">Unsolved</span>";
+
+						echo "<h1 align='center'><small>".$time['eventname']."</small></h1><hr/>";
 						echo("<h2><small>".$row['heading']." ".$tag."</small></h2>");
 						$des = Markdown::defaultTransform($row['description']);
 						$in = Markdown::defaultTransform($row['input1']);
@@ -62,7 +64,16 @@ include('menu.php');
 						echo("<h3><small>Problem Description </small></h3>");
 						echo($des."<h3><small>Sample Input</small> </h3>");
 						echo($in."<h3> <small>Sample Output </small></h3> ");
-
+						echo($out."<br/><h4><small>Maximum Time Limit </small></h4>".$row['timelimit']." ms <br/> <h4><small>Maximum Points </small></h4>".$row['points']." <br/> <h4> <small> Languages Supported </small></h4>");
+					  $query2="SELECT `c`,`cpp`,`java`,`python` from problempref where probid=".$row['probid'];
+                      $result2 = mysql_query($query2) or die(mysql_error());
+                      while ($id=mysql_fetch_array($result2)){ 
+                      if($id['c']==1) echo " c ";
+                      if($id['cpp']==1) echo " cpp ";
+                      if($id['java']==1) echo " java ";
+                      if($id['python']==1) echo " python ";
+                      echo "<br/> <br/>";
+                    }
 						echo'<form action="solve.php" method="get">
 				    	<input type="hidden" name="id" value="'.$_GET['pid'].'"/>';
 				      
@@ -95,8 +106,20 @@ include('menu.php');
 			else { 
 				$i=1;
 				while($row = mysql_fetch_array($result)) {
+					$sql = "SELECT status FROM solve WHERE (username='".$_SESSION['username']."' AND probid='".$row['probid']."')";
+					$res = mysql_query($sql);
+					$tag = "";
+					// decide the attempted or solve tag
+					if(mysql_num_rows($res) !== 0) {
+						$r = mysql_fetch_array($res);
+						if($r['status'] == 1)
+							$tag = " <span class=\"label label-warning\">Attempted</span>";
+						else if($r['status'] == 2)
+							$tag = " <span class=\"label label-success\">Solved</span>";
+					}
+					else $tag = " <span class=\"label label-warning\">Unsolved</span>";
 
-	       			echo("<li><a href=\"problemphp?eid=".$_GET['eid']."&pid=".$_GET['pid']."\">".$i." ) ".$row['heading']."</a></li>\n");
+	       			echo("<li><a href=\"problem.php?eid=".$_GET['eid']."&pid=".$row['probid']."\">".$i." ) ".$row['heading']." ".$tag."</a></li>\n");
 			       $i++;
 			   }
 			}
@@ -130,8 +153,8 @@ include('menu.php');
 					else if($r['status'] == 2)
 						$tag = " <span class=\"label label-success\">Solved</span>";
 				}
-				
-         	echo("<li><a href=\"problem.php?eid=".$id."&id=".$row['probid']."\">".$row['heading'].$tag."</a></li>\n");
+				else $tag = " <span class=\"label label-warning\">Unsolved</span>";
+         	echo("<li><a href=\"problem.php?eid=".$id."&pid=".$row['probid']."\">".$row['heading']." ".$tag."</a></li>\n");
           }
 
       }

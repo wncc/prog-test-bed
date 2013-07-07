@@ -19,7 +19,7 @@
               <li class="divider-vertical"></li>
               <li><a href="event.php"><i class="icon-th-list"></i> Events</a></li>
               <li class="divider-vertical"></li>
-              <li><a href="problems.php"><i class="icon-pencil"></i> Problems </a></li>
+              <li><a href="problem.php"><i class="icon-pencil"></i> Problems </a></li>
               <li class="divider-vertical"></li>
               <li><a href="scorecard.php"><i class="icon-list"></i> Scorecard</a></li>
               <li class="divider-vertical"></li>
