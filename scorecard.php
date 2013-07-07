@@ -33,6 +33,7 @@ include('menu.php');
 		</div>
 		<div class="span7">
 			<?php 
+			echo "<h1 align='center'><small>Scorecard</small></h1> <br/>";
 			$sql = "SELECT * FROM solve WHERE  (username='".$_SESSION['username']."'AND status=2 )";
 			$res = mysql_query($sql);
 			if(mysql_num_rows($res) !== 0) {
