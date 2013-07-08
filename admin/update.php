@@ -48,6 +48,7 @@
 			if(trim($_POST['title']) == "" || trim($_POST['problem']) == "" || trim($_POST['timelimit']) == "")
 				header("Location: addproblem.php?nerror=1");
 			else {
+                echo "ATleast here";
 				mysql_query("INSERT into `problems` (`eventname`,`heading`,`description`,`points`,`timelimit`,`input1`,`output1`) VALUES ('".mysql_real_escape_string($_POST['eventname'])."','".mysql_real_escape_string($_POST['title'])."','".trim(mysql_real_escape_string($_POST['problem']))."','"
 					.mysql_real_escape_string($_POST['points'])."','".mysql_real_escape_string($_POST['timelimit'])."','".trim(mysql_real_escape_string($_POST['samplei']))."','".trim(mysql_real_escape_string($_POST['sampleo']))."')") or die(mysql_error());
 				$query = "SELECT probid from problems where heading='".mysql_real_escape_string($_POST['title'])."'";
