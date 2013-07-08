@@ -75,7 +75,9 @@ include('menu.php');
                       echo "<br/> <br/>";
                     }
 						echo'<form action="solve.php" method="get">
-				    	<input type="hidden" name="id" value="'.$_GET['pid'].'"/>';
+				    	<input type="hidden" name="pid" value="'.$_GET['pid'].'"/>
+				    	<input type="hidden" name="eid" value="'.$_GET['eid'].'"/>
+				    	';
 				      
 				        $query = "SELECT * FROM solve WHERE(status=2 AND probid='".$_GET['pid']."')";
 				        $result = mysql_query($query);
