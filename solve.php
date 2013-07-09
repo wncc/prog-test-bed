@@ -30,6 +30,7 @@
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
     <link href="css/codemirror.css" rel="stylesheet">
+    <link href="css/bootstrap-fileupload.min.css" rel="stylesheet">
     <style type="text/css">
       .CodeMirror {border-top: 1px solid black; border-bottom: 1px solid black;}
       .CodeMirror-activeline-background {background: #e8f2ff !important;}
@@ -136,11 +137,20 @@ include('menu.php');
                     <li><a href="#">Java</a></li>
                     <li><a href="#">Python</a></li> </ul></div><br/>';
                     
-                    echo '<form><br/> <br/>
-                    <input name="language" type="hidden" id="formlanginput"/><textarea id="code" name="code">
+                    echo '<form method="post" enctype="multipart/form-data" action="update.php"><br/> <br/>
+                    <input name="language" type="hidden" id="formlanginput"/>
+                    <input name="probid" value="'.$_GET['pid'].'"<h3><small>Write code or upload a file</small></h3><p>While uploading file make sure you choose a language, to avoid discrepancies</p>
+                    <div class="fileupload fileupload-new" data-provides="fileupload">
+  <div class="input-append">
+    <div class="uneditable-input span3"><i class="icon-file fileupload-exists"></i> <span class="fileupload-preview"></span></div><span class="btn btn-file"><span class="fileupload-new">Select file</span><span class="fileupload-exists">Change</span><input type="file" name="solution" /></span><a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
+  </div>
+</div><textarea id="code" name="code">
             		/*Enter your code here.
-If you are using python make sure you comment these lines using "#" */</textarea></form>';
-                    echo "</div>";
+While using python make sure you comment these lines using "#" 
+You can aswell upload a file for your submission */</textarea> <br/>
+<input class="btn btn-primary" type="submit" value="Update Solution"/>
+</form>';
+                    echo "<p><small><strong>Note:</strong>&nbsp; On submitting a file as well as an edited code, by default submissions of only the file will be considered and not the edited code <br> So make sure you submit the appropriate code only.</small></p></div>";
                 }
             }
                 ?>
@@ -163,6 +173,7 @@ If you are using python make sure you comment these lines using "#" */</textarea
     <script src="js/jquery.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/codemirror.js"></script>
+    <script src="js/bootstrap-fileupload.min.js"></script>
     <script>
     $(document).ready(function(){
     $('#toggles').on('click',function(event){
