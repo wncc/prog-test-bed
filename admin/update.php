@@ -48,19 +48,20 @@
 			if(trim($_POST['title']) == "" || trim($_POST['problem']) == "" || trim($_POST['timelimit']) == "")
 				header("Location: addproblem.php?nerror=1");
 			else {
-				mysql_query("INSERT into `problems` (`eventname`,`heading`,`description`,`points`,`timelimit`,`input1`,`output1`) VALUES ('".mysql_real_escape_string($_POST['eventname'])."','".mysql_real_escape_string($_POST['title'])."','".trim(mysql_real_escape_string($_POST['problem']))."','"
-					.mysql_real_escape_string($_POST['points'])."','".mysql_real_escape_string($_POST['timelimit'])."','".trim(mysql_real_escape_string($_POST['samplei']))."','".trim(mysql_real_escape_string($_POST['sampleo']))."')") or die(mysql_error());
-				$query = "SELECT probid from problems where heading='".mysql_real_escape_string($_POST['title'])."'";
-				$result = mysql_query($query);
-				$id=mysql_result($result, 0);
+				echo "Masala".$_POST['eventname'];
+				// mysql_query("INSERT into `problems` (`eventname`,`heading`,`description`,`points`,`timelimit`,`input1`,`output1`) VALUES ('".mysql_real_escape_string($_POST['eventname'])."','".mysql_real_escape_string($_POST['title'])."','".trim(mysql_real_escape_string($_POST['problem']))."','"
+				// 	.mysql_real_escape_string($_POST['points'])."','".mysql_real_escape_string($_POST['timelimit'])."','".trim(mysql_real_escape_string($_POST['samplei']))."','".trim(mysql_real_escape_string($_POST['sampleo']))."')") or die(mysql_error());
+				// $query = "SELECT probid from problems where heading='".mysql_real_escape_string($_POST['title'])."'";
+				// $result = mysql_query($query);
+				// $id=mysql_result($result, 0);
 				
-				if($_POST['c']=='on') $c=1; else $c=0;
-				if($_POST['cpp']=='on') $cpp=1; else $cpp=0;
-				if($_POST['java']=='on') $java=1; else $java=0;
-				if($_POST['python']=='on') $python=1; else $python=0;
+				// if($_POST['c']=='on') $c=1; else $c=0;
+				// if($_POST['cpp']=='on') $cpp=1; else $cpp=0;
+				// if($_POST['java']=='on') $java=1; else $java=0;
+				// if($_POST['python']=='on') $python=1; else $python=0;
 
-				mysql_query("INSERT into `problempref` (`probid`,`c`,`cpp`,`java`,`python`) values ('".$id."','".$c."','".$cpp."','".$java."','".$python."')") or die(mysql_error());
-				header("Location: addproblem.php?pid=".$id);
+				// mysql_query("INSERT into `problempref` (`probid`,`c`,`cpp`,`java`,`python`) values ('".$id."','".$c."','".$cpp."','".$java."','".$python."')") or die(mysql_error());
+				//header("Location: addproblem.php?pid=".$id);
 			}
 		}
 		else if($_POST['action']=='editproblem') {

@@ -124,10 +124,22 @@ include('menu.php');
                     echo "</div>";
                     echo "<div id=\"codezone\" class=\"span6\">";
                     echo "<h2><small>Coding Zone </small></h2>";
-                    echo'<button class="btn btn-info" id="toggles">Toggle Problem </button>';
-                    echo '<form><br/> <br/><textarea id="code" name="code">
-            		/*Enter your code here*/
-					</textarea></form>';
+                    echo'<button class="btn btn-info" id="toggles">Toggle Problem </button><br/><br/>';
+                    
+                    echo '<div class="btn-group">
+                    <a class="btn dropdown-toggle" id="langlist" data-toggle="dropdown" href="#">Select Language
+                    <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu langlist">
+                    <li><a href="#">C</a></li>
+                    <li><a href="#">C++</a></li>
+                    <li><a href="#">Java</a></li>
+                    <li><a href="#">Python</a></li> </ul></div><br/>';
+                    
+                    echo '<form><br/> <br/>
+                    <input name="language" type="hidden" id="formlanginput"/><textarea id="code" name="code">
+            		/*Enter your code here.
+If you are using python make sure you comment these lines using "#" */</textarea></form>';
                     echo "</div>";
                 }
             }
@@ -175,6 +187,40 @@ include('menu.php');
         styleActiveLine: true,
         mode: "text/x-csrc"
       });
+
+
+      editor.on("change", function() {
+      clearTimeout(pending);
+      setTimeout(update, 400);
+    });
+    var pending;
+    function update(){
+              if($("#formlanginput").val()=="C"){
+                editor.setOption("mode", "text/x-csrc");
+              }
+              else if($("#formlanginput").val()=="C++"){
+               editor.setOption("mode", "text/x-c++src"); 
+              }
+              else if($("#formlanginput").val()=="Java"){
+               editor.setOption("mode", "text/x-java"); 
+              }
+              else if($("#formlanginput").val()=="Python"){
+               editor.setOption("mode", "text/x-python"); 
+              }
+              else{
+                editor.setOption("mode", "text/html"); 
+              }
+    }
+      $(".langlist li a").click(function(){
+
+              $("#langlist").html($(this).text()+"&nbsp<span class='caret'></span>");
+              $("#formlanginput").val($(this).text());
+
+              
+              
+
+
+           });
   });
       
     </script>
