@@ -139,10 +139,19 @@ include('menu.php');
                     
                     echo '<form method="post" enctype="multipart/form-data" action="update.php"><br/> <br/>
                     <input name="language" type="hidden" id="formlanginput"/>
-                    <input name="probid" value="'.$_GET['pid'].'"<h3><small>Write code or upload a file</small></h3><p>While uploading file make sure you choose a language, to avoid discrepancies</p>
+                    <input name="probid" type="hidden" value="'.$_GET['pid'].'"/><h3><small>Write code or upload a file</small></h3><p>While uploading file make sure you choose a language, to avoid discrepancies</p>
                     <div class="fileupload fileupload-new" data-provides="fileupload">
   <div class="input-append">
-    <div class="uneditable-input span3"><i class="icon-file fileupload-exists"></i> <span class="fileupload-preview"></span></div><span class="btn btn-file"><span class="fileupload-new">Select file</span><span class="fileupload-exists">Change</span><input type="file" name="solution" /></span><a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
+    <div class="uneditable-input span3">
+    <i class="icon-file fileupload-exists"></i> 
+    <span class="fileupload-preview"></span>
+    </div>
+    <span class="btn btn-file">
+    <span class="fileupload-new">Select file</span>
+    <span class="fileupload-exists">Change</span>
+    <input type="file" id="uploadsoln" name="solution" />
+    </span>
+    <a href="#" id="remove" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
   </div>
 </div><textarea id="code" name="code">
             		/*Enter your code here.
@@ -232,6 +241,15 @@ You can aswell upload a file for your submission */</textarea> <br/>
 
 
            });
+
+      $('#uploadsoln').change(function(){// above check
+        
+        var ext = $('#uploadsoln').val().split('.').pop().toLowerCase();
+        if($.inArray(ext, ['cpp','c','java','py','']) == -1) {
+            $('#remove').click();
+            alert('invalid extension!');
+        }
+      });
   });
       
     </script>
