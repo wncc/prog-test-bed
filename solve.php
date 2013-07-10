@@ -137,9 +137,10 @@ include('menu.php');
                     <li><a href="#">Java</a></li>
                     <li><a href="#">Python</a></li> </ul></div><br/>';
                     
-                    echo '<form method="post" enctype="multipart/form-data" action="update.php"><br/> <br/>
-                    <input name="language" type="hidden" id="formlanginput"/>
-                    <input name="probid" type="hidden" value="'.$_GET['pid'].'"/><h3><small>Write code or upload a file</small></h3><p>While uploading file make sure you choose a language, to avoid discrepancies</p>
+                    echo '<form method="post" id="submitcode" enctype="multipart/form-data" action="update.php"><br/> <br/>
+                    <input name="language" type="hidden" id="formlanginput" required/>
+                    <input name="probid" type="hidden" value="'.$_GET['pid'].'"/>
+                    <input type="hidden" name="action" value="addsolution" id="action"/><h3><small>Write code or upload a file</small></h3><p>While uploading file make sure you choose a language, to avoid discrepancies</p>
                     <div class="fileupload fileupload-new" data-provides="fileupload">
   <div class="input-append">
     <div class="uneditable-input span3">
@@ -157,8 +158,10 @@ include('menu.php');
             		/*Enter your code here.
 While using python make sure you comment these lines using "#" 
 You can aswell upload a file for your submission */</textarea> <br/>
-<input class="btn btn-primary" type="submit" value="Update Solution"/>
-</form>';
+</form>
+<input class="btn btn-primary" type="button" value="Update Solution" onclick="submit()"/>
+
+';
                     echo "<p><small><strong>Note:</strong>&nbsp; On submitting a file as well as an edited code, by default submissions of only the file will be considered and not the edited code <br> So make sure you submit the appropriate code only.</small></p></div>";
                 }
             }
@@ -184,7 +187,19 @@ You can aswell upload a file for your submission */</textarea> <br/>
     <script src="js/codemirror.js"></script>
     <script src="js/bootstrap-fileupload.min.js"></script>
     <script>
-    $(document).ready(function(){
+
+    function submit(){
+      var lang=$("#formlanginput").val();
+
+      if (lang == "C" || lang == "C++" || lang =="Java" || lang =="Python"){
+        document.getElementById("submitcode").submit();
+        
+      }
+      else{
+        alert("Please select a language");
+       
+      }
+    };
     $('#toggles').on('click',function(event){
       	if($('#problem').css('display') == 'none'){
       		$('#codezone').removeClass('span12');
@@ -208,10 +223,13 @@ You can aswell upload a file for your submission */</textarea> <br/>
         mode: "text/x-csrc"
       });
 
+      
 
-      editor.on("change", function() {
+      editor.on("change", function(cm) {
       clearTimeout(pending);
       setTimeout(update, 400);
+      document.getElementById("code").value=cm.getValue();
+      
     });
     var pending;
     function update(){
@@ -250,7 +268,11 @@ You can aswell upload a file for your submission */</textarea> <br/>
             alert('invalid extension!');
         }
       });
-  });
+
+      
+  
+
+
       
     </script>
 </body></html>
