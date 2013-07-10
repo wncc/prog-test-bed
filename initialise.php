@@ -65,18 +65,20 @@
     PRIMARY KEY (`probid`)
     )") or die('Error creating table "problem pref".' . mysql_error());
 
-   mysql_query("CREATE TABLE IF NOT EXISTS `solve` (
+   mysql_query("
+
+CREATE TABLE IF NOT EXISTS `solve` (
   `slno` int(11) NOT NULL AUTO_INCREMENT,
   `probid` int(11) NOT NULL,
   `username` varchar(25) NOT NULL,
   `status` int(11) NOT NULL DEFAULT '0',
-  `attempts` int(11) NOT NULL DEFAULT '0',
-  `soln` text NOT NULL,
+  `attemptno` int(11) NOT NULL DEFAULT '0',
+  `soln-filename` varchar(50) NOT NULL,
   `lang` varchar(20) NOT NULL,
   `score` float NOT NULL,
   `time` bigint(20) NOT NULL,
   PRIMARY KEY (`slno`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1") or die('Error creating table "solve"'.mysql_error());
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1") or die('Error creating table "solve"'.mysql_error());
 
     // create the user 'admin' with password 'admin'
     $random=randomNum(5);
