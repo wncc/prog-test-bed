@@ -72,6 +72,19 @@
 <div class="container container-fluid">
 
 <?php
+      if(isset($_GET['success']))
+          echo("<div class=\"alert alert-success span12\">\n Your problem has been successfully added to compiler queue\n</div>");
+        else  if(isset($_GET['edit']))
+          echo("<div class=\"alert alert-success span12\">\n You are editing a problem \n</div>");
+      else if(isset($_GET['uperror']))
+          echo("<div class=\"alert alert-success span12\">\n Error while uploading please try again!\n</div>");
+       else if(isset($_GET['ferror']))
+          echo("<div class=\"alert alert-error span12\">\n Error Uploading file. Please try again \n</div>");
+        else if(isset($_GET['serror']))
+          echo("<div class=\"alert alert-error span12\">\n Your code should be less than 1 MB \n</div>");
+      
+?>
+<?php
 include('menu.php');
 ?>
 	<div class="row-fluid" id="main-content">
@@ -140,6 +153,7 @@ include('menu.php');
                     echo '<form method="post" id="submitcode" enctype="multipart/form-data" action="update.php"><br/> <br/>
                     <input name="language" type="hidden" id="formlanginput" required/>
                     <input name="probid" type="hidden" value="'.$_GET['pid'].'"/>
+                    <input name="eventid" type="hidden" value="'.$_GET['eid'].'"/>
                     <input type="hidden" name="action" value="addsolution" id="action"/><h3><small>Write code or upload a file</small></h3><p>While uploading file make sure you choose a language, to avoid discrepancies</p>
                     <div class="fileupload fileupload-new" data-provides="fileupload">
   <div class="input-append">

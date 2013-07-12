@@ -32,6 +32,44 @@
 					
 			}
 		}
+
+		else if($_POST['action']=='addsolution'){
+			 $code=$_POST['code'];
+			 $lang=$_POST['language'];
+			 $username=$_SESSION['username'];
+			 $probid=$_POST['probid'];
+			 $eid=$_POST['eventid'];
+
+			 $query="SELECT * from solve WHERE ( probid=".$probid." AND username='".$username."')";
+			 $result=mysql_query($query);
+			 $attemptno=mysql_num_rows($result);
+			 $attemptno=$attemptno+1;
+			 echo "  ".$lang." ".$username." ".$probid." ".$attemptno;
+			 if($_FILES['solution']['name']){
+			 	//if no errors...
+				if(!$_FILES['solution']['error'])
+				{
+					if($_FILES['solution']['size'] > (1024000)) //can't be larger than 1 MB
+					{
+						
+						header("Location: solve.php?serror=1&pid=".$probid."&eid=".$eid);
+					}
+					else{
+						$target_path = "admin/";
+						$target_path = $target_path . $username."-".$probid."-".$attemptno; 
+						if(move_uploaded_file($_FILES['solution']['tmp_name'], $target_path)) {
+							header("Location: solve.php?success=1&pid=".$probid."&eid=".$eid);
+						    
+						} else{
+						    header("Location: solve.php?fgerror=1&pid=".$probid."&eid=".$eid);
+						}
+					}
+			 }
+			 else{
+			 	header("Location: solve.php?ferror=1&pid=".$probid."&eid=".$eid);
+			 }
+		}
 	}
+}
 
 	?>
