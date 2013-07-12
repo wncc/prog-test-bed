@@ -35,11 +35,22 @@
 
 		else if($_POST['action']=='addsolution'){
 			 $code=$_POST['code'];
-			 $lang=$_POST['language'];
+			 $lang=$_POST['lang'];
 			 $username=$_SESSION['username'];
 			 $probid=$_POST['probid'];
 			 $eid=$_POST['eventid'];
-
+			 if($lang=="C"){
+			 	$ext=".c";
+			 }
+			 else if ($lang=="C++") {
+			 	$ext=".cpp";
+			 }
+			 else if ($lang=="Java") {
+			 	$ext=".java";
+			 }
+			 else if ($lang=="Python") {
+			 	$ext=".py";
+			 }
 			 $query="SELECT * from solve WHERE ( probid=".$probid." AND username='".$username."')";
 			 $result=mysql_query($query);
 			 $attemptno=mysql_num_rows($result);
@@ -55,19 +66,29 @@
 						header("Location: solve.php?serror=1&pid=".$probid."&eid=".$eid);
 					}
 					else{
-						$target_path = "admin/";
-						$target_path = $target_path . $username."-".$probid."-".$attemptno; 
+						$target_path = "submissions/";
+						$target_path = $target_path . $username."-".$probid."-".$attemptno."".$ext; 
 						if(move_uploaded_file($_FILES['solution']['tmp_name'], $target_path)) {
+							mysql_query("INSERT into `solve` (`username`,`probid`,`attemptno` ,`lang`,`soln-filename`) VALUES ('".$username."',".$probid .",".$attemptno.",'".$lang."','".$target_path."')") or die(mysql_error());
 							header("Location: solve.php?success=1&pid=".$probid."&eid=".$eid);
 						    
 						} else{
-						    header("Location: solve.php?fgerror=1&pid=".$probid."&eid=".$eid);
+						    header("Location: solve.php?ferror=1&pid=".$probid."&eid=".$eid);
 						}
 					}
 			 }
 			 else{
 			 	header("Location: solve.php?ferror=1&pid=".$probid."&eid=".$eid);
 			 }
+		}
+		else{
+			$target_path = "submissions/";
+			$target_path = $target_path . $username."-".$probid."-".$attemptno."".$ext;
+			$fp = file_put_contents($username."-".$probid."-".$attemptno."".$ext,$code);
+			rename($username."-".$probid."-".$attemptno."".$ext,$target_path);
+			mysql_query("INSERT into `solve` (`username`,`probid`,`attemptno` ,`lang`,`soln-filename`) VALUES ('".$username."',".$probid .",".$attemptno.",'".$lang."','".$target_path."')") or die(mysql_error());
+			header("Location: solve.php?success=1&pid=".$probid."&eid=".$eid);
+			
 		}
 	}
 }

@@ -151,7 +151,7 @@ include('menu.php');
                     <li><a href="#">Python</a></li> </ul></div><br/>';
                     
                     echo '<form method="post" id="submitcode" enctype="multipart/form-data" action="update.php"><br/> <br/>
-                    <input name="language" type="hidden" id="formlanginput" required/>
+                    <input name="lang" type="hidden" id="formlanginput">
                     <input name="probid" type="hidden" value="'.$_GET['pid'].'"/>
                     <input name="eventid" type="hidden" value="'.$_GET['eid'].'"/>
                     <input type="hidden" name="action" value="addsolution" id="action"/><h3><small>Write code or upload a file</small></h3><p>While uploading file make sure you choose a language, to avoid discrepancies</p>
