@@ -34,6 +34,13 @@
     <style type="text/css">
       .CodeMirror {border-top: 1px solid black; border-bottom: 1px solid black;}
       .CodeMirror-activeline-background {background: #e8f2ff !important;}
+      .CodeMirror-fullscreen {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        height: auto;
+        z-index: 9;
+      }
+
     </style>
     <!-- fav and touch icons -->
     <link rel="shortcut icon" href="http://twitter.github.com/bootstrap/assets/ico/favicon.ico">
@@ -171,7 +178,13 @@ include('menu.php');
 </div><textarea id="code" name="code">
             		/*Enter your code here.
 While using python make sure you comment these lines using "#" 
-You can aswell upload a file for your submission */</textarea> <br/>
+You can aswell upload a file for your submission 
+
+Use F11 to enter fullscreen editing mode! 
+(Make sure the cursor is in present in the editing zone
+ else you will enter browser fullscreen mode)
+Use F11 again to toggle fullscreen editing mode
+*/</textarea> <br/>
 </form>
 <input class="btn btn-primary" type="button" value="Update Solution" onclick="submit()"/>
 
@@ -200,6 +213,8 @@ You can aswell upload a file for your submission */</textarea> <br/>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/codemirror.js"></script>
     <script src="js/bootstrap-fileupload.min.js"></script>
+    <script src="js/fullscreen.js"></script>
+    <script src="js/xml.js"></script>
     <script>
 
     function submit(){
@@ -234,7 +249,16 @@ You can aswell upload a file for your submission */</textarea> <br/>
         lineNumbers: true,
         matchBrackets: true,
         styleActiveLine: true,
-        mode: "text/x-csrc"
+         mode: "text/x-csrc",
+        extraKeys: {
+        "F11": function(cm) {
+          cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+        },
+        "Esc": function(cm) {
+          if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
+        }
+      }
+       
       });
 
       
@@ -243,6 +267,7 @@ You can aswell upload a file for your submission */</textarea> <br/>
       clearTimeout(pending);
       setTimeout(update, 400);
       document.getElementById("code").value=cm.getValue();
+      
       
     });
     var pending;
