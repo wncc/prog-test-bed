@@ -60,8 +60,10 @@ include('menu.php');
 										$tag = " <span class=\"label label-warning\">Attempted</span>";
 									else if($r['status'] == 2)
 										$tag = " <span class=\"label label-success\">Solved</span>";
+									else if($r['status'] == 0)
+										$tag = " <span class=\"label label-info\">Queued for Correction</span>";
 								}
-								else $tag = " <span class=\"label label-warning\">Unsolved</span>";
+								else $tag = " <span class=\"label label-important\">Unsolved</span>";
 				       			echo("<li><a href=\"problem.php?eid=".$_GET['eid']."&pid=".$row['probid']."\">".$i." ) ".$row['heading']." ".$tag."</a></li>\n");
 						       $i++;
 						   }
