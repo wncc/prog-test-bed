@@ -65,9 +65,7 @@
     PRIMARY KEY (`probid`)
     )") or die('Error creating table "problem pref".' . mysql_error());
 
-   mysql_query("
-
-CREATE TABLE IF NOT EXISTS `solve` (
+   mysql_query("CREATE TABLE IF NOT EXISTS `solve` (
   `slno` int(11) NOT NULL AUTO_INCREMENT,
   `probid` int(11) NOT NULL,
   `username` varchar(25) NOT NULL,

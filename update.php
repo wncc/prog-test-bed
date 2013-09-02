@@ -70,7 +70,8 @@
 						$target_path = $target_path . $username."-".$probid."-".$attemptno."".$ext; 
 						if(move_uploaded_file($_FILES['solution']['tmp_name'], $target_path)) {
 							mysql_query("INSERT into `solve` (`username`,`probid`,`attemptno` ,`lang`,`soln-filename`) VALUES ('".$username."',".$probid .",".$attemptno.",'".$lang."','".$target_path."')") or die(mysql_error());
-							header("Location: solve.php?success=1&pid=".$probid."&eid=".$eid);
+							//header("Location: solve.php?success=1&pid=".$probid."&eid=".$eid);
+							compile($probid,$target_path,$compilerhost,$compilerport,$time,$input,$lang);
 						    
 						} else{
 						    header("Location: solve.php?ferror=1&pid=".$probid."&eid=".$eid);
